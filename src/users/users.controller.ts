@@ -14,6 +14,7 @@ import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 import { UsersService } from './users.service';
 
+// @UseInterceptors(LogInterceptor) // usando o interceptor em todas as rotas do controller
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -49,6 +50,7 @@ export class UsersController {
     return this.usersService.delete(id);
   }
 
+  // @UseInterceptors(LogInterceptor) // usando o interceptor somente na rota desejada
   @Post()
   async create(@Body() data: CreateUserDTO) {
     return this.usersService.create(data);
