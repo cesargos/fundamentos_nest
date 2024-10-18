@@ -11,12 +11,13 @@ datasource db {
 }
 
 model User {
-  user_id   Int      @id @default(autoincrement())
-  name      String   @db.VarChar(63)
-  email     String   @db.VarChar(127)
-  password  String   @db.VarChar(127)
-  update_at DateTime @default(now()) @db.Timestamp(0)
-  create_at DateTime @default(now()) @db.Timestamp(0)
+  user_id     Int       @id @default(autoincrement())
+  name        String    @db.VarChar(63)
+  email       String    @db.VarChar(127)
+  password    String    @db.VarChar(127)
+  birth_date  DateTime? @db.Date
+  update_at   DateTime  @default(now()) @db.Timestamp(0)
+  create_at   DateTime  @default(now()) @db.Timestamp(0)
 
   @@map("users") // visto que foi modificado o nome do Model para User o prisma perde a referencia e é nessario fazer esse mapeamento com esse comando
 }

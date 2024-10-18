@@ -12,63 +12,45 @@ import {
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
   @Get()
   async list() {
-    return {
-      users: [],
-    };
+    return this.usersService.list();
   }
 
   @Get(':id')
   async getOne(@Param('id', ParseIntPipe) id: number) {
-    return {
-      user: {},
-      id,
-    };
+    return this.usersService.getUser(id);
   }
 
   @Put(':id')
   async update(
-    @Body() body: UpdatePutUserDTO,
+    @Body() data: UpdatePutUserDTO,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return {
-      user: {},
-      id,
-      body,
-      method: 'put',
-    };
+    return this.usersService.update(id, data);
   }
 
   @Patch(':id')
   async updatePartial(
-    @Body() body: UpdatePatchUserDTO,
+    @Body() data: UpdatePatchUserDTO,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return {
-      user: {},
-      id,
-      body,
-      method: 'patch',
-    };
+    return this.usersService.updateParcial(id, data);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return {
-      message: `User ${id} foi deletado com sucesso!`,
-    };
+    return this.usersService.delete(id);
   }
 
   @Post()
-  async create(@Body() body: CreateUserDTO) {
-    return {
-      user: {},
-      body,
-      method: 'post',
-    };
+  async create(@Body() data: CreateUserDTO) {
+    return this.usersService.create(data);
   }
 }
