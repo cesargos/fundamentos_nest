@@ -9,7 +9,6 @@ import { Observable } from 'rxjs';
 // a função tap pega exatamente o que retornou do handle, executa algom e depois retorna exatamento o handler
 import { tap } from 'rxjs/operators';
 
-@Injectable()
 export class LogInterceptor implements NestInterceptor {
   intercept(
     context: ExecutionContext,

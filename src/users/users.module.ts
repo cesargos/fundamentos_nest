@@ -1,7 +1,13 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { UserIdCheckMiddleware } from 'src/midleware/user-id-check.middleware';
 
 @Module({
   controllers: [UsersController], // inicializa os controllers junto com o modulo (assim cria as rotas)
@@ -12,4 +18,14 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   // 3. lembrar de exportar dentro do módulo importado a dependencia que vc quer usar
   imports: [PrismaModule],
 })
-export class UsersModule {}
+export class UsersModule implements NestModule {
+  // NestModule é usado para utilizar middleware
+  configure(consumer: MiddlewareConsumer) {
+    // apply recebe varios middleware separados por virgula
+    // forRoutes/exclude recebe varias rotas para aplicar ou não aplicar o middleware
+    consumer.apply(UserIdCheckMiddleware).forRoutes({
+      path: 'users/:id',
+      method: RequestMethod.ALL,
+    });
+  }
+}
