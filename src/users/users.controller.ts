@@ -4,11 +4,14 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
+import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -20,37 +23,43 @@ export class UsersController {
   }
 
   @Get(':id')
-  async getOne(@Param() params) {
+  async getOne(@Param('id', ParseIntPipe) id: number) {
     return {
       user: {},
-      params,
+      id,
     };
   }
 
   @Put(':id')
-  async update(@Body() body, @Param() params) {
+  async update(
+    @Body() body: UpdatePutUserDTO,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     return {
       user: {},
-      params,
+      id,
       body,
       method: 'put',
     };
   }
 
   @Patch(':id')
-  async updatePartial(@Body() body, @Param() params) {
+  async updatePartial(
+    @Body() body: UpdatePatchUserDTO,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     return {
       user: {},
-      params,
+      id,
       body,
       method: 'patch',
     };
   }
 
   @Delete(':id')
-  async delete(@Param() params) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return {
-      message: `User ${params?.id} foi deletado com sucesso!`,
+      message: `User ${id} foi deletado com sucesso!`,
     };
   }
 

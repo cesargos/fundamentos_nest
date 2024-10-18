@@ -12,9 +12,9 @@ export class CreateUserDTO {
       minLength: 8,
 
       // é necessário informar q não precisa ter a quantidade minima pois por defaul é 1
-      minLowercase: 1,
+      minLowercase: 0,
       minNumbers: 1,
-      minSymbols: 1,
+      minSymbols: 0,
       minUppercase: 1,
     },
     {
