@@ -1,0 +1,22 @@
+// Todas as vezes q esse arquivo for modificado (exemplo usando o comando npx prisma db pull)
+// é necessário rodar o comando npx prisma generate para atualizar as configs interna do prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id   Int      @id @default(autoincrement())
+  name      String   @db.VarChar(63)
+  email     String   @db.VarChar(127)
+  password  String   @db.VarChar(127)
+  update_at DateTime @default(now()) @db.Timestamp(0)
+  create_at DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("users") // visto que foi modificado o nome do Model para User o prisma perde a referencia e é nessario fazer esse mapeamento com esse comando
+}
