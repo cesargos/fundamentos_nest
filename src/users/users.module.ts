@@ -17,6 +17,7 @@ import { UserIdCheckMiddleware } from 'src/midleware/user-id-check.middleware';
   // 2. cuidado um modulo não pode importar o outro e vice-versa, dependências circulares error (udar o forwardRef  ou re-arquiteturar o código)
   // 3. lembrar de exportar dentro do módulo importado a dependencia que vc quer usar
   imports: [PrismaModule],
+  exports: [UsersModule],
 })
 export class UsersModule implements NestModule {
   // NestModule é usado para utilizar middleware
