@@ -43,6 +43,7 @@ export class AuthService {
         audience: this.audience,
         issuer: this.issuer,
       });
+      console.log({ data });
       return data;
     } catch (error) {
       throw new BadRequestException(error);
@@ -60,6 +61,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
+    console.log({ email, password });
     const user = await this.prisma.user.findFirst({
       where: {
         email,

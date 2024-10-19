@@ -1,9 +1,10 @@
-import { Body, Controller, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthLoginDTO } from './dto/auth-login.dto';
 import { AuthForgetDTO } from './dto/auth-forget.dto';
 import { AuthRegisterDTO } from './dto/auth-register.dto';
 import { AuthResetDTO } from './dto/auth-reset.dto';
 import { AuthService } from './auth.service';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -11,12 +12,12 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() { email, password }: AuthLoginDTO) {
-    this.authService.login(email, password);
+    return this.authService.login(email, password);
   }
 
   @Post('register')
   async register(@Body() data: AuthRegisterDTO) {
-    this.authService.register(data);
+    return this.authService.register(data);
   }
 
   @Post('forget')
@@ -29,8 +30,10 @@ export class AuthController {
     return this.authService.reset(password, token);
   }
 
+  @UseGuards(AuthGuard)
   @Post('me')
-  async me(@Headers('Authorization') token: string) {
-    return this.authService.checkToken(token?.split(' ')[1]);
+  async me(@Req() request: any) {
+    const { tokenInfo } = request;
+    return { tokenInfo };
   }
 }
