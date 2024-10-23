@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { UsersModule } from 'src/users/users.module';
@@ -10,10 +10,12 @@ import { AuthService } from './auth.service';
     JwtModule.register({
       secret: process.env.JWT_SECRET,
     }),
-    UsersModule,
+    //função usada para resolver dependencia circular
+    forwardRef(() => UsersModule),
     PrismaModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}

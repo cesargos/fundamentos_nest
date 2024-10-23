@@ -1,4 +1,5 @@
 import {
+  forwardRef,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -8,6 +9,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UserIdCheckMiddleware } from 'src/midleware/user-id-check.middleware';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [UsersController], // inicializa os controllers junto com o modulo (assim cria as rotas)
@@ -16,7 +18,7 @@ import { UserIdCheckMiddleware } from 'src/midleware/user-id-check.middleware';
   // 1. importa Outros módulos para serem utilizados dentro do deste módulo
   // 2. cuidado um modulo não pode importar o outro e vice-versa, dependências circulares error (udar o forwardRef  ou re-arquiteturar o código)
   // 3. lembrar de exportar dentro do módulo importado a dependencia que vc quer usar
-  imports: [PrismaModule],
+  imports: [PrismaModule, forwardRef(() => AuthModule)], //forwardRef: função usada para resolver dependencia circular
   exports: [UsersService],
 })
 export class UsersModule implements NestModule {
