@@ -13,8 +13,15 @@ model User {
   email       String      @db.VarChar(127)
   password    String      @db.VarChar(127)
   birth_date  DateTime?   @db.Date
+  role        Int         @default(1)
   update_at   DateTime    @default(now()) @db.Timestamp(0)
   create_at   DateTime    @default(now()) @db.Timestamp(0)
 
   @@map("users")
 }
+
+// modificando o banco 
+// 1. altere a tabela nesse arquivo
+// 2. atualize criando uma migrate com o comando
+//   npx prisma migrate dev --name descricaoAlteracao
+// 3. atualize o client: npx prisma generate

@@ -8,16 +8,9 @@ import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create({ email, name, password }: CreateUserDTO) {
+  async create(data: CreateUserDTO) {
     return this.prisma.user.create({
-      data: {
-        email,
-        name,
-        password,
-      },
-      // select: { // usado para quando não quer retornar todas colunas
-      //   user_id: true,
-      // },
+      data,
     });
   }
 
@@ -40,7 +33,7 @@ export class UsersService {
 
   async update(
     user_id: number,
-    { name, email, birth_date, password }: UpdatePutUserDTO,
+    { name, email, birth_date, password, role }: UpdatePutUserDTO,
   ) {
     await this.getUser(user_id);
     return this.prisma.user.update({
@@ -51,6 +44,7 @@ export class UsersService {
         email: email || '',
         password,
         birth_date: birth_date ? new Date(birth_date) : null,
+        role,
       },
       where: {
         user_id,

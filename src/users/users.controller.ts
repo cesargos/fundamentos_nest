@@ -6,14 +6,21 @@ import {
   Patch,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 import { UsersService } from './users.service';
 import { ParamId } from 'src/decorators/param-id.decorator';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enums/role.enum';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RoleGuard } from 'src/guards/role.guard';
 
 // @UseInterceptors(LogInterceptor) // usando o interceptor em todas as rotas do controller
+@Roles(Role.Admin) //  injeta a regra Role para todas as funções da controller
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -38,6 +45,7 @@ export class UsersController {
     return this.usersService.updateParcial(id, data);
   }
 
+  // @Roles(Role.Admin, Role.User) // Caso vc queira injetar a regra para uma unica função da controller
   @Delete(':id')
   async delete(@ParamId() id: number) {
     return this.usersService.delete(id);
