@@ -1,0 +1,17 @@
+version: '3.8'
+
+## docker compose up -d
+## docker exec -it fundamentos_nestjs_sql mysql -u root -p
+## USE fundamentos_nestjs;
+## SHOW TABLES; ou outros comandos sql
+services:
+  db:
+    image: mysql:5.7.30
+    container_name: fundamentos_nestjs_sql
+    environment:
+      MYSQL_DATABASE: fundamentos_nestjs
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
