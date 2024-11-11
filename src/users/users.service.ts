@@ -3,12 +3,15 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserDTO) {
+    const salt = await bcrypt.genSalt();
+    data.password = await bcrypt.hash(data.password, salt);
     return this.prisma.user.create({
       data,
     });
@@ -36,6 +39,10 @@ export class UsersService {
     { name, email, birth_date, password, role }: UpdatePutUserDTO,
   ) {
     await this.getUser(user_id);
+
+    const salt = await bcrypt.genSalt();
+    password = await bcrypt.hash(password, salt);
+
     return this.prisma.user.update({
       // o prisma só vai alterar os campos passados.
       // Caso queira apagar caso não seja passado tem q informar EX. email: data.email || '',
@@ -57,6 +64,11 @@ export class UsersService {
     { birth_date, ...data }: UpdatePatchUserDTO,
   ) {
     await this.getUser(user_id);
+
+    if (data.password) {
+      const salt = await bcrypt.genSalt();
+      data.password = await bcrypt.hash(data.password, salt);
+    }
 
     return this.prisma.user.update({
       data: {
