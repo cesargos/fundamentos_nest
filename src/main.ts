@@ -6,6 +6,11 @@ import { LogInterceptor } from './interceptors/log.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    // methods: ['GET', 'POST'] // configura os metodos permitidos na sua aplicação se for diferente desses ele bloqueia
+    // origin: ['cesargos.com.br', 'mobile.cesargos.com.br'],
+  });
+
   // configura os pipelines globais
   app.useGlobalPipes(
     new ValidationPipe({
