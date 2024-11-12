@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 
 @Module({
   imports: [
@@ -16,6 +18,26 @@ import { APP_GUARD } from '@nestjs/core';
     ]),
     forwardRef(() => UsersModule),
     forwardRef(() => AuthModule),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+          user: 'ilene.considine23@ethereal.email',
+          pass: 'xzUGs56YnDDg9xH3V5',
+        },
+      },
+      defaults: {
+        from: '"devcesargos" <ilene.considine2@ethereal.email>',
+      },
+      template: {
+        dir: __dirname + '/templates', // path de onde vão estar os templates
+        adapter: new PugAdapter(), // proprio do PUG
+        options: {
+          strict: true,
+        },
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [
