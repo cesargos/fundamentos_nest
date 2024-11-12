@@ -4,12 +4,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { AuthRegisterDTO } from './dto/auth-register.dto';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
+import { UserEntity } from 'src/users/entity/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -18,12 +19,13 @@ export class AuthService {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
     private readonly mailer: MailerService,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
-  createToken(user: User) {
+  createToken(user: UserEntity) {
     const accessToken = this.jwtService.sign(
       {
         user_id: user.user_id,
@@ -64,13 +66,13 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    console.log({ email, password });
-    const user = await this.prisma.user.findFirst({
-      where: {
-        email,
-      },
+    const salt = await bcrypt.genSalt();
+    console.log({ salt, email, password });
+    const user = await this.usersRepository.findOneBy({
+      email,
     });
 
+    console.log({ user });
     if (!user || !(await bcrypt.compare(password, user.password)))
       throw new UnauthorizedException('E-mail e/ou senha incorretos!');
 
@@ -78,10 +80,8 @@ export class AuthService {
   }
 
   async forget(email: string) {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        email,
-      },
+    const user = await this.usersRepository.findOneBy({
+      email,
     });
 
     if (!user) throw new BadRequestException('O e-mail está incorreto!');
@@ -123,14 +123,13 @@ export class AuthService {
       const salt = await bcrypt.genSalt();
       password = await bcrypt.hash(password, salt);
 
-      const user = await this.prisma.user.update({
-        where: {
-          user_id,
-        },
-        data: {
-          password,
-        },
+      const updateResult = await this.usersRepository.update(user_id, {
+        password,
       });
+
+      console.log(updateResult);
+      const user = await this.usersService.getUser(user_id);
+
       return this.createToken(user);
     } catch (error) {
       throw new BadRequestException(error);

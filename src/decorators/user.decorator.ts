@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   NotFoundException,
 } from '@nestjs/common';
-import { User as UserEntity } from '@prisma/client';
+import { UserEntity } from 'src/users/entity/user.entity';
 
 export const User = createParamDecorator(
   <K extends keyof UserEntity>(

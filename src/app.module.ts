@@ -7,9 +7,13 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from './users/entity/user.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         ttl: 1000,
@@ -18,6 +22,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
     ]),
     forwardRef(() => UsersModule),
     forwardRef(() => AuthModule),
+
     MailerModule.forRoot({
       transport: {
         host: 'smtp.ethereal.email',
@@ -37,6 +42,16 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
           strict: true,
         },
       },
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      entities: [UserEntity],
+      synchronize: process.env.stage === 'local', // Cuidado: NUNCA USAR EM PRODUÇÃO!!! Faz com que apague os dados do banco de dados e crie colunas novas automaticamente de acordo com a entidade
     }),
   ],
   controllers: [AppController],
