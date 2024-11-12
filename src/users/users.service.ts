@@ -12,6 +12,9 @@ export class UsersService {
   async create(data: CreateUserDTO) {
     const salt = await bcrypt.genSalt();
     data.password = await bcrypt.hash(data.password, salt);
+    data.birth_date = /^\d{4}-\d\d-\d\d$/.test(data.birth_date)
+      ? new Date(data.birth_date).toISOString()
+      : null;
     return this.prisma.user.create({
       data,
     });
