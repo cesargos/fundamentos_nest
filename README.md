@@ -1,3 +1,21 @@
+Comando para criar migration   npx typeorm-ts-node-esm migration:create ./typeorm/migration/InsertInitialUsers
+
+0 - Instale as dependencias ```npm i```
+1 - Inicializar o docker ```sudo service docker start```
+2 - Subir o my-sql do docker-compose ```docker-compose up```
+3 - Rodar as migrations ```npm run migration:up```
+4 - Rode o app ```npm run start:dev```
+5 - Teste o login:
+```
+  curl --location 'http://localhost:3001/auth/login' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+      "email": "cesargoshulk@gmail.com",
+      "password": "@Password123"
+  }'
+```
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
