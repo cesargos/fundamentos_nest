@@ -1,14 +1,14 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { AppController } from '@app/app.controller';
+import { AppService } from '@app/app.service';
+import { UsersModule } from '@users/users.module';
+import { AuthModule } from '@auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './users/entity/user.entity';
+import { UserEntity } from '@users/entity/user.entity';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({

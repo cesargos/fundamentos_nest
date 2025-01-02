@@ -15,24 +15,24 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateUserDTO } from './dto/create-user.dto';
-import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
-import { UpdatePutUserDTO } from './dto/update-put-user.dto';
-import { UsersService } from './users.service';
-import { ParamId } from 'src/decorators/param-id.decorator';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/enums/role.enum';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { RoleGuard } from 'src/guards/role.guard';
+import { CreateUserDTO } from '@users/dto/create-user.dto';
+import { UpdatePatchUserDTO } from '@users/dto/update-patch-user.dto';
+import { UpdatePutUserDTO } from '@users/dto/update-put-user.dto';
+import { UsersService } from '@users/users.service';
+import { ParamId } from '@decorators/param-id.decorator';
+import { Roles } from '@decorators/roles.decorator';
+import { Role } from '@app/enums/role.enum';
+import { AuthGuard } from '@guards/auth.guard';
+import { RoleGuard } from '@guards/role.guard';
 import {
   FileFieldsInterceptor,
   FileInterceptor,
   FilesInterceptor,
 } from '@nestjs/platform-express';
-import { User } from 'src/decorators/user.decorator';
+import { User } from '@decorators/user.decorator';
 import { join } from 'path';
-import { FileService } from 'src/file/file.service';
-import { LogInterceptor } from 'src/interceptors/log.interceptor';
+import { FileService } from '@app/file/file.service';
+import { LogInterceptor } from '@interceptors/log.interceptor';
 
 @UseInterceptors(LogInterceptor) // usando o interceptor em todas as rotas do controller
 @Roles(Role.Admin) //  injeta a regra Role para todas as funções da controller
@@ -50,24 +50,27 @@ export class UsersController {
   }
 
   @Get(':id')
-  async getOne(@ParamId() id: number) {
-    return this.usersService.getUser(id);
+  async getOne(@ParamId() user_id: number) {
+    return this.usersService.getUser(user_id);
   }
 
   @Put(':id')
-  async update(@Body() data: UpdatePutUserDTO, @ParamId() id: number) {
-    return this.usersService.update(id, data);
+  async update(@Body() data: UpdatePutUserDTO, @ParamId() user_id: number) {
+    return this.usersService.update(user_id, data);
   }
 
   @Patch(':id')
-  async updatePartial(@Body() data: UpdatePatchUserDTO, @ParamId() id: number) {
-    return this.usersService.updateParcial(id, data);
+  async updatePartial(
+    @Body() data: UpdatePatchUserDTO,
+    @ParamId() user_id: number,
+  ) {
+    return this.usersService.updateParcial(user_id, data);
   }
 
   // @Roles(Role.Admin, Role.User) // Caso vc queira injetar a regra para uma unica função da controller
   @Delete(':id')
-  async delete(@ParamId() id: number) {
-    return this.usersService.delete(id);
+  async delete(@ParamId() user_id: number) {
+    return this.usersService.delete(user_id);
   }
 
   // @UseInterceptors(LogInterceptor) // usando o interceptor somente na rota desejada

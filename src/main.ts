@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from '@app/app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { LogInterceptor } from './interceptors/log.interceptor';
+import { LogInterceptor } from '@interceptors/log.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +23,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LogInterceptor());
 
   // inicia a aplicação
-  await app.listen(3000);
+  await app.listen(3001);
 }
 
 bootstrap();

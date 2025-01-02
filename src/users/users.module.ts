@@ -5,13 +5,13 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UsersController } from '@users/users.controller';
+import { UsersService } from '@users/users.service';
 import { UserIdCheckMiddleware } from 'src/midleware/user-id-check.middleware';
-import { AuthModule } from 'src/auth/auth.module';
-import { FileModule } from 'src/file/file.module';
+import { AuthModule } from '@auth/auth.module';
+import { FileModule } from '@app/file/file.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './entity/user.entity';
+import { UserEntity } from '@users/entity/user.entity';
 
 @Module({
   controllers: [UsersController], // inicializa os controllers junto com o modulo (assim cria as rotas)

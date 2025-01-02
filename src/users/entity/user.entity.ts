@@ -1,4 +1,4 @@
-import { Role } from 'src/enums/role.enum';
+import { Role } from '@app/enums/role.enum';
 import {
   Column,
   CreateDateColumn,
@@ -37,10 +37,10 @@ export class UserEntity {
   birth_date?: Date;
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: string | Date;
 
   @UpdateDateColumn()
-  updateAt: string;
+  updatedAt: string | Date;
 
   @Column({
     default: Role.User,
