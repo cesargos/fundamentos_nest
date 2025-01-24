@@ -44,14 +44,14 @@ import { ConfigModule } from '@nestjs/config';
       },
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [UserEntity],
-      synchronize: process.env.stage === 'local', // Cuidado: NUNCA USAR EM PRODUÇÃO!!! Faz com que apague os dados do banco de dados e crie colunas novas automaticamente de acordo com a entidade
+      // synchronize: process.env.stage === 'local', // Cuidado: NUNCA USAR EM PRODUÇÃO!!! Faz com que apague os dados do banco de dados e crie colunas novas automaticamente de acordo com a entidade
     }),
   ],
   controllers: [AppController],

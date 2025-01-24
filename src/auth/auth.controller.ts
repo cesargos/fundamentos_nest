@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { AuthLoginDTO } from './dto/auth-login.dto';
 import { AuthForgetDTO } from './dto/auth-forget.dto';
 import { AuthRegisterDTO } from './dto/auth-register.dto';
@@ -15,6 +23,16 @@ export class AuthController {
   @HttpCode(200)
   async login(@Body() { email, password }: AuthLoginDTO) {
     return this.authService.login(email, password);
+  }
+
+  @Get('teste')
+  @HttpCode(200)
+  async teste(@Query() param: any) {
+    return {
+      message: 'ok',
+      code: 200,
+      param,
+    };
   }
 
   @Post('register')

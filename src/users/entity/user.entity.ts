@@ -37,10 +37,10 @@ export class UserEntity {
   birth_date?: Date;
 
   @CreateDateColumn()
-  createdAt: string;
+  create_at: string;
 
   @UpdateDateColumn()
-  updateAt: string;
+  update_at: string;
 
   @Column({
     default: Role.User,
